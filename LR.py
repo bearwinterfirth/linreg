@@ -70,3 +70,13 @@ class LinearRegression:
         # beräkna signifikans för enskild β-parameter
         sig=b[a]/(S*np.sqrt(c[a,a]))
         return sig
+    
+    def relevance(self, sig, a, n, d):
+        # beräkna relevans för enskild β-parameter
+        rel=2*min(stats.t.cdf(sig[a], n-d-1), stats.t.sf(sig[a], n-d-1))
+        return rel
+    
+    def confidence_interval(self, n, d, var, c, a):
+        # beräkna konfidensintervallet för enskild β-parameter
+        ci=stats.t.ppf(1-0.05/2,n-d-1)*var*np.sqrt(c[a,a])
+        return ci
