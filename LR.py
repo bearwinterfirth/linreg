@@ -56,7 +56,17 @@ class LinearRegression:
         Rsq = SSR/Syy
         return Rsq
     
-    def Pearsonr(self, X, a, b)
+    def Pearsonr(self, X, a, b):
         # beräkna Pearson-r
         r = stats.pearsonr(X[:, a], X[:, b])
         return r
+    
+    def var_covar(self, X, var):
+        # beräkna varians/kovarians-matris
+        c = np.linalg.pinv(X.T @ X)*var
+        return c
+    
+    def significance(self, a, b, c, S):
+        # beräkna signifikans för enskild β-parameter
+        sig=b[a]/(S*np.sqrt(c[a,a]))
+        return sig
