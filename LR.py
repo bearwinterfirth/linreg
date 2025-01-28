@@ -5,6 +5,7 @@ class LinearRegression:
     def __init__(self):
         self.X = None
         self.y = None
+      
 
     def fit(self, X, y):
         # beräkna β0, β1, ... βi för en linjär regressionsmodell
