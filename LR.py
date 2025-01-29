@@ -2,20 +2,21 @@ import numpy as np
 import scipy.stats as stats
 
 class LinearRegression:
-    def __init__(self):
-        self.X = None
-        self.y = None
+    def __init__(self, X, y):
+        self.y = y
+        self.X = X
+        self.n = y.shape[0]
+        self.d = self.X.shape[1] - 1
       
-
-    def fit(self, X, y):
+    def fit(self):
         # beräkna β0, β1, ... βi för en linjär regressionsmodell
-        b = np.linalg.pinv(X.T @ X) @ X.T @ y
+        b = np.linalg.pinv(self.X.T @ self.X) @ self.X.T @ self.y
         return b
     
-    def dimension(self, d):
+    def dimension(self, b):
         # beräkna dimensionen av vår modell
-        dim = len(d) - 1
-        return dim
+        d = len(b) - 1
+        return d
     
     def sample_size(self, y):
         # beräkna storleken på stickprovet
@@ -67,17 +68,17 @@ class LinearRegression:
         c = np.linalg.pinv(X.T @ X)*var
         return c
     
-    def significance(self, a, b, c, S):
+    def significance(self, i, b, c, S):
         # beräkna signifikans för enskild β-parameter
-        sig=b[a]/(S*np.sqrt(c[a,a]))
+        sig=b[i]/(S*np.sqrt(c[i,i]))
         return sig
     
-    def relevance(self, sig, a, n, d):
+    def relevance(self, sig, i, n, d):
         # beräkna relevans för enskild β-parameter
-        rel=2*min(stats.t.cdf(sig[a], n-d-1), stats.t.sf(sig[a], n-d-1))
+        rel=2*min(stats.t.cdf(sig[i], n-d-1), stats.t.sf(sig[i], n-d-1))
         return rel
     
-    def confidence_interval(self, n, d, var, c, a):
+    def confidence_interval(self, n, d, var, c, i):
         # beräkna konfidensintervallet för enskild β-parameter
-        ci=stats.t.ppf(1-0.05/2,n-d-1)*var*np.sqrt(c[a,a])
+        ci=stats.t.ppf(1-0.05/2,n-d-1)*var*np.sqrt(c[i,i])
         return ci
